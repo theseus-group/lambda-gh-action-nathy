@@ -10,26 +10,33 @@ on:
       - development
 
 jobs:
-  configure-aws:
-    uses: theseus-group/.github/.github/workflows/configure-aws.yml@main 
-    with:
-      aws_region: us-east-1
-      role_arn: arn:aws:iam::908027422461:role/TG-GithubActionsPipelineRole
-
   deploy:
-    needs: configure-aws
     runs-on: ubuntu-latest
 
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
+      # Step 1: Configure AWS Credentials
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::908027422461:role/TG-GithubActionsPipelineRole
+          aws-region: us-east-1
+
+      # Step 2: Checkout the Code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 3: Install Dependencies
       - name: Install dependencies
         run: |
           npm install -g aws-cdk
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      # Step 4: Deploy the FastAPI App
       - name: Deploy FastAPI App
         run: |
           cdk deploy --app="python3 app.py" --require-approval=never --verbose
