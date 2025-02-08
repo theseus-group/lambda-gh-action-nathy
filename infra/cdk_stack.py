@@ -1,11 +1,11 @@
 from aws_cdk import (
     Stack,
-    CfnOutput,  # ✅ Import CfnOutput properly
+    CfnOutput,  
     aws_lambda as _lambda,
     aws_apigateway as apigw
 )
 
-from constructs import Construct  # ✅ Import Construct separately
+from constructs import Construct  
 
 class WebAppStack(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs):
@@ -26,5 +26,4 @@ class WebAppStack(Stack):
             proxy=True,
         )
 
-        # ✅ Corrected CfnOutput usage
         CfnOutput(self, "APIEndpoint", value=api.url)

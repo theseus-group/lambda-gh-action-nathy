@@ -2,3 +2,4 @@ fastapi
 uvicorn
 aws-cdk-lib
 constructs
+mangum

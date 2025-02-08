@@ -1,6 +1,6 @@
 import random
 from fastapi import FastAPI
-import uvicorn
+from mangum import Mangum
 
 app = FastAPI()
 
@@ -13,5 +13,5 @@ def get_random_number():
     print(f"Generated Random Number: {random_number}")
     return {"random_number": random_number}
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# Define the Lambda handler
+lambda_handler = Mangum(app)
